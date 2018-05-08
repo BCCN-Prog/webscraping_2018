@@ -1,8 +1,8 @@
 # File with important common constants for the API scripts
 # @ToDo: Consider move the KEY to a pmk or similar
 KEY = "ba3288780ec658cc"
-BASE_URL = "http://api.wunderground.com/api/"+ KEY +"/forecast10day/q/"
-FILENAME = "simple_forecast.json"
+BASE_URL = "http://api.wunderground.com/api/"+ KEY +"/hourly10day/q/"
+FILENAME = "hourly_forecast.json"
 CITIES = ["BERLIN", "HAMBURG", "MUNICH", "COLOGNE", "FRANKFURT"]
 
 #Coordinates
