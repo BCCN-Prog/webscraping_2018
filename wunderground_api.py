@@ -19,3 +19,23 @@ def collect_forecast(country, city):
 
 
 [collect_forecast(COUNTRY, city) for city in CITIES]
+"""
+Structure of json response:
+object
+	array
+		response: metadata
+		forecast
+			txt_forecast: text information of the weather forecast
+			simpleforecast
+				forecastday
+					[0-9]:
+						date: date info
+						high: fahrenheit, celsius
+						low : fahrenheit, celsius
+						conditions
+						img url
+						wind
+						snow
+						humidity
+
+"""
