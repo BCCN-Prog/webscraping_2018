@@ -4,9 +4,9 @@ FILENAME = "simple_forecast.json"
 CITIES = ["Berlin", "Hamburg", "Munich", "Cologne", "Frankfurt"]
 
 #Coordinates
-coordinates = {"Berlin":   (52.5200, 13.4050),
-               "Hamburg":  (53.5511,  9.9937),
-               "Munich":   (48.1351, 11.5820),
-               "Cologne":  (50.9375,  6.9603),
-               "Frankfurt":(50.1109,  8.6821),
-}
+coordinates = { 'BERLIN': (52.52000659999999, 13.404954),
+                'MUNICH': (48.1351253,  11.5819805),
+                'HAMBURG': (53.5510846, 9.9936819),
+                'FRANFURT': (50.1109221, 8.6821267),
+                'COLOGNE': (50.937531, 6.9602786)
+            }
