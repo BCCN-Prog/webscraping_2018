@@ -21,7 +21,7 @@ def collect_forecast_coords(coords, city):
     location = str(latitude)+ "," + str(longitude)
     response = get_response(location)
     simple_forecast = response.get("hourly_forecast")
-    filename = str(time.time()) + "_" + city + "_" + constants.FILENAME
+    filename = constants.FOLDERNAME + str(round(time.time())) + "_" + city + "_" + constants.FILENAME
     f = open(filename, 'w')
     json.dump(simple_forecast, f)
     f.close()

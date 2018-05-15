@@ -1,8 +1,10 @@
 # File with important common constants for the API scripts
 # @ToDo: Consider move the KEY to a pmk or similar
+# @ToDo: Change the filename to a general path non system dependent
 KEY = "ba3288780ec658cc"
 BASE_URL = "http://api.wunderground.com/api/"+ KEY +"/hourly10day/q/"
 FILENAME = "hourly_forecast.json"
+FOLDERNAME = "~/Documents/webscraping_2018/data/"
 CITIES = ["BERLIN", "HAMBURG", "MUNICH", "COLOGNE", "FRANKFURT"]
 
 #Coordinates
