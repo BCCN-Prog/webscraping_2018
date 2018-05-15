@@ -1,0 +1,15 @@
+Guide to create a Cron Job:
+
+~ ssh username@server
+~ crontab -e
+
+
+m h dom mon dow command
+
+Example:
+--------
+* * * * * pythonpath filepath
+
+
+NB:
+- The filepath has to be in your home directly i.e. /home/username/Documents/file.py
