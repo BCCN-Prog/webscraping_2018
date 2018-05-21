@@ -1,0 +1,29 @@
+Database suggested tables structure:
+
+Table 1 (Forecasts Dates):
+ID              : automatically generated (PK)
+DATE OF FORECAST: the date that the forecast was made for
+
+
+Table 2 (Predictions)
+ID                  : automatically generated (PK)
+Forecast ID         : ID in the Forcaste table (FK)
+Website             : Website name from which the prediction was taken
+DATE OF PREDICTION  : the date on which the prediction was taken for the forecasted date
+TEMPERATURE         : temperature predicted 
+OTHER WEATHER PARAMS: column for each of the other weather parameters predicted
+
+=====================================================================================================================
+
+Example:
+Table 1 (Forecasts Dates)
+- id_f1, date_of_forecast (e.g. 22.05)
+- id_f2, data_of_forecast (e.g. 23.05)
+
+Table 2 (Predictions)
+- id_pred1, id_f1, websiteA, data_of_prediction (e.g 20.05), temp, other weather variables
+- id_pred2, id_f1, websiteB, data_of_prediction (e.g 20.05), temp, other weather variables
+- id_pred3, id_f1, websiteA, data_of_prediction (e.g 21.05), temp, other weather variables
+- id_pred4, id_f1, websiteB, data_of_prediction (e.g 21.05), temp, other weather variables
+- id_pred5, id_f2, websiteA, data_of_prediction (e.g 20.05), temp, other weather variables
+- …….
