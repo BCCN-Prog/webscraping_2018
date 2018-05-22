@@ -7,7 +7,11 @@ def get_response(query):
     """
     Access wunderground API to do a get request
     """
-    return requests.get(constants.BASE_URL + query+ ".json").json()
+    try:
+        response = requests.get(constants.BASE_URL + query+ ".json")
+        return response.json() if response.ok else None
+    except Exception as e:
+        raise e
 
 
 def collect_forecast_coords(coords, city):
