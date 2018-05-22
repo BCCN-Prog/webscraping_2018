@@ -5,12 +5,12 @@ Legend:
 
 * prediction info:
 - website (url)
-- date_of_aquisition (timestamp)
+- date_for_which_weather_is_predicted (timestamp)
 - city ('Berlin', 'Hamburg', etc.)
 
 *daily:
 - prediction_info_index (fk)
-- date_for_which_weather_is_predicted (timestamp only date)
+- date_of_aquisition (timestamp)
 - temperature_max (celcius)
 - temperature_min (celcius)
 - wind speed (km/h)
@@ -24,7 +24,7 @@ Legend:
 
 *hourly:
 - prediction_info_index (fk)
-- time_for_which_weather_is_predicted (date + hour)
+- date_of_aquisition (timestamp)
 - temperature (celcius)
 - wind speed (km/h)
 - humidity (%)
