@@ -3,16 +3,13 @@ Legend:
 - : variable
 -------------------
 
-* prediction info:
+*Daily:
 - website (url)
-- date_for_which_weather_is_predicted (timestamp)
+- date_for_which_weather_is_predicted (timestamp in the form YYYYMMDDHH)
 - city ('Berlin', 'Hamburg', etc.)
-
-*daily:
-- prediction_info_index (fk)
-- date_of_aquisition (timestamp)
-- temperature_max (celcius)
-- temperature_min (celcius)
+- date_of_aquisition (timestamp in the form YYYYMMDDHH)
+- temperature_max (celsius)
+- temperature_min (celsius)
 - wind speed (km/h)
 - humidity (%)
 - precipation_per (%)
@@ -22,10 +19,12 @@ Legend:
 - snow (mm)
 - UVI (UVI index)
 
-*hourly:
-- prediction_info_index (fk)
-- date_of_aquisition (timestamp)
-- temperature (celcius)
+*Hourly:
+- website (url)
+- date_for_which_weather_is_predicted (timestamp in the form YYYYMMDDHH)
+- city ('Berlin', 'Hamburg', etc.)
+- date_of_aquisition (timestamp in the form YYYYMMDDHH)
+- temperature (celsius)
 - wind speed (km/h)
 - humidity (%)
 - precipation_per (%)
@@ -35,10 +34,12 @@ Legend:
 - snow (mm)
 - UVI (UVI index)
 
-*daily_periods:
-- prediction_info_index (fk)
-- time_for_which_weather_is_predicted (date + hour (02:00, 08:00, 14:00 or 20:00))
-- temperature (celcius)
+*Daily_periods:
+- website (url)
+- date_for_which_weather_is_predicted (timestamp in the form YYYYMMDDHH)
+- city ('Berlin', 'Hamburg', etc.)
+- time_for_which_weather_is_predicted (timestamp in the form YYYYMMDDHH)
+- temperature (celsius)
 - wind_speed (km/h)
 - precipation_per (%)
 - precipation_l (L/m^2)
