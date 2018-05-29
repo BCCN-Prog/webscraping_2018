@@ -16,6 +16,7 @@ import os
 import time
 import datetime
 
+#FIRST PART: ONCE-A-DAY PREDICTIONS
 #These are the urls referring directly to high, low temperature
 hi_lo_url = "https://wetter.bild.de/web2014/ifr-wetter-deutschland.asp"
 prec_url = "https://wetter.bild.de/web2014/ifr-niederschlag-deutschland.asp"
@@ -96,6 +97,8 @@ for day in range(6):
 #BUNDLE THE INDIVIDUAL DICTIONARIES INTO A SINGLE DICT, SAVE AS PD DATAFRAME
 date_of_acquisition = datetime.datetime.now() #for timestamp
 website = ['Bild.de']
+#storing cities as a dictionary of german name : english name,
+#so .keys() and .values() gives the list of cities in german and english respectively
 cities = {"Berlin":"Berlin", "Frankfurt":"Frankfurt", "Hamburg":"Hamburg",
           "Köln":"Cologne", "München":"Munich"}
 
@@ -123,3 +126,65 @@ filename = os.path.expanduser('~/Documents/webscraping_2018/data_bild/')
 timestamp = datetime.datetime.now().strftime('%Y%m%d%H')
 filename += timestamp + ".pkl"
 daily.to_pickle(filename)
+
+#SECOND PART: FOUR-TIMES-A-DAY PREDICTIONS
+#scrape specified cities for morning, noon, afternoon, night, extract temperature,
+# precipitation in percent and condition
+
+PREDICTION_TIMES = ['morning','noon','afternoon','night']
+
+
+#first we need the specific url for each city
+city_query_url = 'https://wetter.bild.de/web2014/vorhersage-ort.asp?id='
+city_ids_dict = {'Berlin': '10115-berlin',
+                 'Frankfurt': '65931-frankfurt-am-main',
+                 'Hamburg': '22305-hamburg',
+                 'Köln' : '50668-koeln',
+                 'München' : '80331-muenchen'}
+
+
+#for the sake of clarity, i tried to be as consistent as possible with 
+#Pooja's code (daily_dict above) when it comes to saving the data as a dataframe
+#
+#data will be saved into this dictionary before being converted to a dataframe
+daily_periods_dict = {'date_of_acquisition':[],'website':[],'city':[],
+              'time_of_prediction':[],'temp':[], 'precipitation_per':[],
+              'condition':[]}
+
+for city in cities:
+    #parse html for each city
+    city_url = city_query_url + city_ids_dict[city]
+    city_html = http.request('GET', city_url).data.decode('utf-8')
+    #CAREFUL!!! there is a mistake in the website: there is a /span that doesn't have a match
+    #we need to remove it manually before parsing
+    city_html_fixed = city_html.replace("VORMITTAG</span>","VORMITTAG")
+    city_bs = BeautifulSoup(city_html_fixed, "html.parser")
+    
+    #get the table containing the four-times-a-day forecast and extract the data
+    four_table = city_bs.find_all('table', class_='wk_forecast_tbl')[1]
+    # using the magic number here to index this is a bit shitty but there are several
+    #tables that are all of the class 'wk_forecast_tbl'
+    
+    daytimes = four_table.find_all('td', class_="wk_bottomline wk_subheader")
+    for i,daytime in enumerate(daytimes):
+        siblings = [sibling for sibling in daytime.next_siblings]
+        temp_raw = siblings[3]
+        temp = int(temp_raw.text.split('°')[0])
+        condition = siblings[5].text
+        precip_raw = siblings[7].span.next_sibling.next_sibling.next_sibling.next_sibling
+        precip = int(precip_raw.split('%')[0])
+
+        daily_periods_dict['date_of_acquisition'].append(datetime.datetime.now().isoformat())
+        daily_periods_dict['website'].append(city_url)
+        daily_periods_dict['city'].append(city)
+        daily_periods_dict['time_of_prediction'].append(PREDICTION_TIMES[i])
+        daily_periods_dict['temp'].append(temp)
+        daily_periods_dict['precipitation_per'].append(precip)        
+        daily_periods_dict['condition'].append(condition)
+ 
+#convert to dataframe and save to file       
+daily_period = pd.DataFrame(daily_periods_dict)
+filename = os.path.expanduser('~/Documents/webscraping_2018/data_bild/daily_period_')
+timestamp = datetime.datetime.now().strftime('%Y%m%d%H')
+filename += timestamp + ".pkl"
+daily_period.to_pickle(filename)
