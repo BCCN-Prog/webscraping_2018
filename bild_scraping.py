@@ -9,7 +9,7 @@
 # 
 # Wind is given as a tuple of strength in Bft (int) and direction (e.g. "NE" if wind _comes from_ north east).
 
-# In[37]:
+# In[76]:
 
 import urllib3
 from bs4 import BeautifulSoup
@@ -18,12 +18,7 @@ import pickle
 import warnings
 
 
-# In[42]:
-
-Daily_dict = {}
-
-
-# In[43]:
+# In[77]:
 
 #These are the urls referring directly to high, low temperature
 hi_lo_url = "https://wetter.bild.de/web2014/ifr-wetter-deutschland.asp"
@@ -31,7 +26,7 @@ prec_url = "https://wetter.bild.de/web2014/ifr-niederschlag-deutschland.asp"
 wind_url = "https://wetter.bild.de/web2014/ifr-windstaerken-deutschland.asp"
 
 
-# In[44]:
+# In[78]:
 
 #load and parse page
 http = urllib3.PoolManager()
@@ -43,7 +38,7 @@ with warnings.catch_warnings():
 #print(hi_lo.prettify())
 
 
-# In[47]:
+# In[79]:
 
 #TEMPERATURE HIGH/LOW, bild has today + 5 days forecast for that
 #iterate over days, extract day layer for each
@@ -60,18 +55,13 @@ for day in range(6):
     day_dict = {}
     for city in day_cities:
         hi_lo_str = city.nobr.next_sibling.next_sibling
-        if hi_lo_str == None:
-            print("Warning: Hi_Lo_str not found")
-            high = np.nan
-            low = np.nan
-        else:
-            high = int(hi_lo_str.split('|')[0].split('°')[0])
-            low = int(hi_lo_str.split('|')[1].split('°')[0])
+        high = int(hi_lo_str.split('|')[0].split('°')[0])
+        low = int(hi_lo_str.split('|')[1].split('°')[0])
         day_dict[city.nobr.string] = (high, low)
     temp_dicts.append(day_dict)
 
 
-# In[48]:
+# In[80]:
 
 #PRECIPITATION,  bild has only today + 2 days forecast for that
 #iterate over days, extract day layer for each
@@ -93,7 +83,7 @@ for day in range(1,4): #layer 0 corresponds to next 6 hrs, layer 1 to entire cur
     prec_dicts.append(day_dict)
 
 
-# In[49]:
+# In[81]:
 
 #WIND,  bild again has today + 5 days forecast
 WIND_GER_ENG = {"w":"W", "nw":"NW", "n":"N", "no":"NE", "o":"E", "so":"SE", "s":"S", "sw":"SW"}
@@ -119,7 +109,7 @@ for day in range(6):
     wind_dicts.append(day_dict)
 
 
-# In[50]:
+# In[82]:
 
 import time
 import datetime
@@ -133,12 +123,12 @@ Daily_dict = {'Date_of_acquisition':[],'Website':[],'City':[],
               'Date_of_prediction':[],'high_temp':[],'low_temp':[],'wind_speed':[],'wind_direction':[], 'precipitation':[]}
 
 
-# In[51]:
+# In[83]:
 
 for i,city in enumerate(City):
     for days in range(6):
         
-        Daily_dict['Date_of_acquisition'].append(datetime.datetime.now().isoformat())
+        Daily_dict['Date_of_acquisition'].append(datetime.datetime.now().strftime('%Y%m%d%H'))
         Daily_dict['Website'].append(Website)
         Daily_dict['City'].append(City[city])
         Daily_dict['Date_of_prediction'].append(Date_of_acquisition+datetime.timedelta(days))
@@ -152,15 +142,15 @@ for i,city in enumerate(City):
             
 
 
-# In[52]:
+# In[84]:
 
 Daily = pd.DataFrame(dict([ (k,pd.Series(v)) for k,v in Daily_dict.items() ]))
 
 
-# In[53]:
+# In[85]:
 
-import pathlib
-import tempfile
-filename = pathlib.Path(str(datetime.datetime.now().date()))
-pd.DataFrame.to_csv(Daily, path_or_buf = tempfile.gettempdir() / filename)
+# filename = '/home/danielv/webscraping_2018/data_bild/'
+filename = './'
+timestamp = datetime.datetime.now().strftime('%Y%m%d%H')
+pd.DataFrame.to_csv(Daily, filename + timestamp)
 
