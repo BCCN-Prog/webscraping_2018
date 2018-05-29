@@ -94,4 +94,7 @@ def gather_hourly_information():
     df = pd.DataFrame(data)
     return df
 
-#gather_hourly_information()
+df = gather_hourly_information()
+timestamp = datetime.datetime.now().strftime('%Y%m%d%H%M')
+filename = "/home/danielv/Documents/webscraping_2018/data_hourly/" + timestamp + ".pkl"
+df.to_pickle(filename)
