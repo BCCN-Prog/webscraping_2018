@@ -144,13 +144,12 @@ for i,city in enumerate(City):
 
 # In[84]:
 
-Daily = pd.DataFrame(dict([ (k,pd.Series(v)) for k,v in Daily_dict.items() ]))
+daily = pd.DataFrame(dict([ (k,pd.Series(v)) for k,v in Daily_dict.items() ]))
 
 
 # In[85]:
 
-# filename = '/home/danielv/webscraping_2018/data_bild/'
-filename = './'
+filename = '/home/danielv/Documents/webscraping_2018/data_bild/'
 timestamp = datetime.datetime.now().strftime('%Y%m%d%H')
-pd.DataFrame.to_csv(Daily, filename + timestamp)
-
+filename += timestamp + ".pkl"
+daily.to_pickle(filename)
