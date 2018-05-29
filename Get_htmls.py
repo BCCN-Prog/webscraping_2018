@@ -92,7 +92,7 @@ for i,city in enumerate(cities):
     html_dict['city'] = city
     html_dict['date_of_aquisition'] = current_time
     html_dict['htmls'] = collect_htmls(base_url[i])
-    pkl_name='wetter_de_'+city+'_'+str(current_time)[:10]+'.pkl'
+    pkl_name='./wetter_de/wetter_de_'+city+'_'+str(current_time)[:10]+'.pkl'
     f = open(pkl_name,"wb")
     pickle.dump(html_dict,f)
     f.close()
