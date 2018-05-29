@@ -1,15 +1,11 @@
-
 # coding: utf-8
-
+#
 # Created by Pooja Subramaniam and Marc Aurel Vischer on Tue, May 8.
-
 # Temperature is given as a tuple of daily high and low value, both in degrees Celsius as ints.
-# 
 # Precipitation is given as "probability" as float.
-# 
-# Wind is given as a tuple of strength in Bft (int) and direction (e.g. "NE" if wind _comes from_ north east).
+# Wind is given as a tuple of strength in Bft (int) and direction 
+#(e.g. "NE" if wind _comes from_ north east).
 
-# In[76]:
 
 import urllib3
 from bs4 import BeautifulSoup
@@ -17,17 +13,13 @@ import pandas as pd
 import pickle
 import warnings
 import os
-
-
-# In[77]:
+import time
+import datetime
 
 #These are the urls referring directly to high, low temperature
 hi_lo_url = "https://wetter.bild.de/web2014/ifr-wetter-deutschland.asp"
 prec_url = "https://wetter.bild.de/web2014/ifr-niederschlag-deutschland.asp"
 wind_url = "https://wetter.bild.de/web2014/ifr-windstaerken-deutschland.asp"
-
-
-# In[78]:
 
 #load and parse page
 http = urllib3.PoolManager()
@@ -38,9 +30,7 @@ with warnings.catch_warnings():
     wind_bs = BeautifulSoup(http.request('GET',wind_url).data, "html.parser")
 #print(hi_lo.prettify())
 
-
-# In[79]:
-
+#EXTRACT DATA AND SAVE INTO DICTIONARIES:
 #TEMPERATURE HIGH/LOW, bild has today + 5 days forecast for that
 #iterate over days, extract day layer for each
 temp_dicts = []
@@ -61,9 +51,6 @@ for day in range(6):
         day_dict[city.nobr.string] = (high, low)
     temp_dicts.append(day_dict)
 
-
-# In[80]:
-
 #PRECIPITATION,  bild has only today + 2 days forecast for that
 #iterate over days, extract day layer for each
 prec_dicts = []
@@ -82,9 +69,6 @@ for day in range(1,4): #layer 0 corresponds to next 6 hrs, layer 1 to entire cur
         prec_value = int(prec_str.split()[0])/100
         day_dict[city.nobr.string] = prec_value
     prec_dicts.append(day_dict)
-
-
-# In[81]:
 
 #WIND,  bild again has today + 5 days forecast
 WIND_GER_ENG = {"w":"W", "nw":"NW", "n":"N", "no":"NE", "o":"E", "so":"SE", "s":"S", "sw":"SW"}
@@ -109,46 +93,31 @@ for day in range(6):
         day_dict[city.nobr.string] = (wind_strength,wind_direction)
     wind_dicts.append(day_dict)
 
+#BUNDLE THE INDIVIDUAL DICTIONARIES INTO A SINGLE DICT, SAVE AS PD DATAFRAME
+date_of_acquisition = datetime.datetime.now() #for timestamp
+website = ['Bild.de']
+cities = {"Berlin":"Berlin", "Frankfurt":"Frankfurt", "Hamburg":"Hamburg",
+          "Köln":"Cologne", "München":"Munich"}
 
-# In[82]:
+daily_dict = {'Date_of_acquisition':[],'Website':[],'City':[],
+              'Date_of_prediction':[],'high_temp':[],'low_temp':[],'wind_speed':[],
+              'wind_direction':[], 'precipitation':[]}
 
-import time
-import datetime
-
-Date_of_acquisition = datetime.datetime.now()
-Website = ['Bild.de']
-City = {"Berlin":"Berlin", "Frankfurt":"Frankfurt", "Hamburg":"Hamburg", "Köln":"Cologne", "München":"Munich"}
-
-
-Daily_dict = {'Date_of_acquisition':[],'Website':[],'City':[],
-              'Date_of_prediction':[],'high_temp':[],'low_temp':[],'wind_speed':[],'wind_direction':[], 'precipitation':[]}
-
-
-# In[83]:
-
-for i,city in enumerate(City):
+for i,city in enumerate(cities):
     for days in range(6):
-        
-        Daily_dict['Date_of_acquisition'].append(datetime.datetime.now().strftime('%Y%m%d%H'))
-        Daily_dict['Website'].append(Website)
-        Daily_dict['City'].append(City[city])
-        Daily_dict['Date_of_prediction'].append(Date_of_acquisition+datetime.timedelta(days))
-        Daily_dict['high_temp'].append(temp_dicts[days][city][0])
-        Daily_dict['low_temp'].append(temp_dicts[days][city][1])
-        Daily_dict['wind_speed'].append(wind_dicts[days][city][0])
-        Daily_dict['wind_direction'].append(wind_dicts[days][city][1])
+        daily_dict['Date_of_acquisition'].append(datetime.datetime.now().strftime('%Y%m%d%H'))
+        daily_dict['Website'].append(website)
+        daily_dict['City'].append(cities[city])
+        daily_dict['Date_of_prediction'].append(date_of_acquisition+datetime.timedelta(days))
+        daily_dict['high_temp'].append(temp_dicts[days][city][0])
+        daily_dict['low_temp'].append(temp_dicts[days][city][1])
+        daily_dict['wind_speed'].append(wind_dicts[days][city][0])
+        daily_dict['wind_direction'].append(wind_dicts[days][city][1])
 
         if days<2:
-            Daily_dict['precipitation'].append(prec_dicts[days+1][city]*100)
-            
+            daily_dict['precipitation'].append(prec_dicts[days+1][city]*100)
 
-
-# In[84]:
-
-daily = pd.DataFrame(dict([ (k,pd.Series(v)) for k,v in Daily_dict.items() ]))
-
-
-# In[85]:
+daily = pd.DataFrame(dict([ (k,pd.Series(v)) for k,v in daily_dict.items() ]))
 
 filename = os.path.expanduser('~/Documents/webscraping_2018/data_bild/')
 timestamp = datetime.datetime.now().strftime('%Y%m%d%H')
