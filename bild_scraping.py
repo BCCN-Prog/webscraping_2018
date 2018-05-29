@@ -16,6 +16,7 @@ from bs4 import BeautifulSoup
 import pandas as pd
 import pickle
 import warnings
+import os
 
 
 # In[77]:
@@ -149,7 +150,7 @@ daily = pd.DataFrame(dict([ (k,pd.Series(v)) for k,v in Daily_dict.items() ]))
 
 # In[85]:
 
-filename = '/home/danielv/Documents/webscraping_2018/data_bild/'
+filename = os.path.expanduser('~/Documents/webscraping_2018/data_bild/')
 timestamp = datetime.datetime.now().strftime('%Y%m%d%H')
 filename += timestamp + ".pkl"
 daily.to_pickle(filename)
