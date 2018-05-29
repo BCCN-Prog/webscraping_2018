@@ -58,7 +58,7 @@ def log_error(e):
 # In[6]:
 
 
-cities=['Berlin', 'Hamburg', 'Munich', 'Cologne', 'Frankfurt am Main']
+cities=['Berlin', 'Hamburg', 'Munich', 'Cologne', 'Frankfurt_am_Main']
 
 base_url=['https://www.wetter.de/deutschland/wetter-berlin-18228265/','https://www.wetter.de/deutschland/wetter-hamburg-18219464/','https://www.wetter.de/deutschland/wetter-muenchen-18225562/','https://www.wetter.de/deutschland/wetter-koeln-18220679/','https://www.wetter.de/deutschland/wetter-frankfurt-18221009/']
 
@@ -92,7 +92,7 @@ for i,city in enumerate(cities):
     html_dict['city'] = city
     html_dict['date_of_aquisition'] = current_time
     html_dict['htmls'] = collect_htmls(base_url[i])
-    pkl_name=city+str(current_time)[:10]+'.pkl'
+    pkl_name='wetter_de_'+city+'_'+str(current_time)[:10]+'.pkl'
     f = open(pkl_name,"wb")
     pickle.dump(html_dict,f)
     f.close()
