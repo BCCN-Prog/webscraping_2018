@@ -94,7 +94,7 @@ hourly_dict['precipation_l'] = list(all_features[:,6])
 hourly_dict['wind_direction'] = list(all_features[:,7])
 hourly_dict['condition'] = list(all_features[:,8])
 hourly_dict['snow'] = [None]*number_of_predictions
-hourly_dict['UVI'] = [None]*number_of_predictions
+hourly_dict['uvi'] = [None]*number_of_predictions
 
 data_frame_daily = pd.DataFrame(data=hourly_dict)
 filename = os.path.expanduser('~/Documents/webscraping_2018/data_wetter_de/hourly_period_')
