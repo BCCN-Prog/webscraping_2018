@@ -10,10 +10,8 @@
 import urllib3
 from bs4 import BeautifulSoup
 import pandas as pd
-import pickle
 import warnings
 import os
-import time
 import datetime
 
 #FIRST PART: ONCE-A-DAY PREDICTIONS
@@ -122,7 +120,7 @@ for i,city in enumerate(cities):
 
 daily = pd.DataFrame(dict([ (k,pd.Series(v)) for k,v in daily_dict.items() ]))
 
-filename = os.path.expanduser('~/Documents/webscraping_2018/data_bild/')
+filename = os.path.expanduser('~/Documents/webscraping_2018/data_bild/daily/daily_')
 timestamp = datetime.datetime.now().strftime('%Y%m%d%H')
 filename += timestamp + ".pkl"
 daily.to_pickle(filename)
@@ -197,7 +195,7 @@ for city in cities:
  
 #convert to dataframe and save to file       
 daily_period = pd.DataFrame(daily_periods_dict)
-filename = os.path.expanduser('~/Documents/webscraping_2018/data_bild/daily_period_')
+filename = os.path.expanduser('~/Documents/webscraping_2018/data_bild/daily_period/daily_period_')
 timestamp = datetime.datetime.now().strftime('%Y%m%d%H')
 filename += timestamp + ".pkl"
 daily_period.to_pickle(filename)
