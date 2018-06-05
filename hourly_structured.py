@@ -59,7 +59,7 @@ def extract_parameters(hourly_forecast, city, data):
     data['wind_direction'].append(wind_direction)
     data['condition'].append(condition)
     data['snow'].append(snow)
-    data['UVI'].append(UVI)
+    data['uvi'].append(UVI)
     return data
     #df = pd.DataFrame(data, index=[0])
 
@@ -87,7 +87,7 @@ def gather_hourly_information():
         'wind_direction' : [],
         'condition' : [],
         'snow' : [],
-        'UVI' : [],
+        'uvi' : [],
     }
     for city in constants.coordinates.keys():
         data = gather_hourly_city(city, data)

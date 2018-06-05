@@ -8,7 +8,7 @@ from bs4 import BeautifulSoup
 from datetime import datetime
 from datetime import timedelta
 import os
-
+import json
 import pandas as pd
 import urllib3
 import pickle
@@ -40,20 +40,20 @@ def collect_htmls(city_base_url):
 
 # In[19]:
 
-#filename = '/home/danielv/webscraping_2018/data_bild/'
-filename = './'
+filename = '/home/danielv/Documents/webscraping_2018/data_bild_html/'
+#filename = './'
 for i,city in enumerate(cities):
     html_dict = {}
     current_time = pd.Timestamp(datetime.now())
 
     html_dict['website'] = 'www.bild.de'   
     html_dict['city'] = city
-    html_dict['date_of_aquisition'] = current_time
+    html_dict['date_of_aquisition'] = str(current_time)
     html_dict['htmls'] = collect_htmls(base_urls[i])
     pkl_name=filename+city+str(current_time)[:13]+'.pkl'
     f = open(pkl_name,"wb")
-    pickle.dump(html_dict,f)
-    f.close()
+    with open(pkl_name, 'w') as f:
+        json.dump(html_dict,f)
 
 
 # In[ ]:
