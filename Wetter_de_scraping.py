@@ -10,12 +10,12 @@ import os
 
 days_to_predict = 15
 http = urllib3.PoolManager()
-cities = ['Berlin','Hamburg', 'Munich', 'Cologne', 'Frankfurt']
-cities_tags = ['berlin-18228265/' ,'hamburg-18219464/', 'muenchen-18225562/', 'koeln-18220679/', 'frankfurt-18221009/']
+cities = ['Berlin']#,'Hamburg', 'Munich', 'Cologne', 'Frankfurt']
+cities_tags = ['berlin-18228265/']# ,'hamburg-18219464/', 'muenchen-18225562/', 'koeln-18220679/', 'frankfurt-18221009/']
 url_hourly_base = 'https://www.wetter.de/deutschland/wetter-'
 tag_tags = ['tag-'+str(tag) for tag in range(9,days_to_predict+1)]
-hourly_website_tags = ['wetterbericht-aktuell', 'wetterbericht-morgen', 'wetterbericht-uebermorgen','wetter-bericht','wettervorhersage','wetter-vorhersage','wettervorschau','wetter-vorschau']
-hourly_website_tags.extend(tag_tags)
+hourly_website_tags = ['wetterbericht-aktuell']#, 'wetterbericht-morgen', 'wetterbericht-uebermorgen','wetter-bericht','wettervorhersage','wetter-vorhersage','wettervorschau','wetter-vorschau']
+#hourly_website_tags.extend(tag_tags)
 
 wind_mapping = { 'Nord': 'N', 'Ost':'E', 'West':'W', 'Süd':'S',
                 'Nordost':'NE','Nordnordost':'NNE', 'Nordostost':'NEE',
@@ -38,7 +38,7 @@ number_of_features = 9 #e.g. date_for_which_weather_is_predicted, cities, temper
 number_of_cities = len(cities)
 number_of_predictions = number_of_cities*len(hourly_website_tags)*25
 
-current_time_date = datetime.datetime.now()
+current_time_date = datetime.datetime.now().strftime('%Y%m%d%H')
 hourly_dict = {}
 hourly_dict['website'] = ['Wetter.de']*number_of_predictions
 hourly_dict['date_of_aquisition'] = [current_time_date]*number_of_predictions
@@ -50,12 +50,12 @@ for ci, city in enumerate(cities):
         url = url_hourly_base_city+tag+'.html'
         soup = BeautifulSoup(http.request('GET',url).data, "html5lib")
         dates_for_predicted_days = [str(datetime.date.today() + datetime.timedelta(days=i)) for i in range(days_to_predict)]
-        day_to_predict = dates_for_predicted_days[i]
+        day_to_predict = dates_for_predicted_days[i].replace("-","")
         hourly_info = soup.findAll('div',class_="column column-4 forecast-detail-column-1h")
         for hi, info in enumerate(hourly_info):
             all_features[ci][i][hi][0] = city
             hour = info.find('div',class_="forecast-date").text[0:2]
-            prediction_for = str(day_to_predict)+'-'+str(hour)
+            prediction_for = str(day_to_predict)+str(hour)
             all_features[ci][i][hi][1] = prediction_for
             temp_info = info.find('div', class_="forecast-temperature")
             temp = temp_info.find('span',class_="temperature").text.replace("°","")
@@ -97,6 +97,7 @@ hourly_dict['snow'] = [None]*number_of_predictions
 hourly_dict['uvi'] = [None]*number_of_predictions
 
 data_frame_daily = pd.DataFrame(data=hourly_dict)
+print(data_frame_daily)
 filename = os.path.expanduser('~/Documents/webscraping_2018/data_wetter_de/hourly_period_')
 timestamp = datetime.datetime.now().strftime('%Y%m%d%H')
 filename += timestamp + ".pkl"
