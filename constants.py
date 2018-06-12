@@ -3,6 +3,8 @@
 # @ToDo: Change the filename to a general path non system dependent
 KEY = "ba3288780ec658cc"
 BASE_URL = "http://api.wunderground.com/api/"+ KEY +"/hourly10day/q/"
+DAILY_BASE_URL = "http://api.wunderground.com/api/"+ KEY +"/forecast10day/q/"
+
 FILENAME = "hourly_forecast.json"
 FOLDERNAME = "/home/danielv/Documents/webscraping_2018/data/"
 CITIES = ["BERLIN", "HAMBURG", "MUNICH", "COLOGNE", "FRANKFURT"]

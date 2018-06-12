@@ -45,7 +45,7 @@ def extract_parameters(hourly_forecast, city, data):
     snow = hourly_forecast.get('snow').get('metric')
     UVI = hourly_forecast.get('uvi')
     precipitation_l = None
-    website = 'The Weaher Channel'
+    website = 'The Weather Channel'
 
     data['website'].append(website)
     data['city'].append(city)
