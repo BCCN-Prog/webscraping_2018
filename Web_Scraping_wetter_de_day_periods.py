@@ -1,7 +1,7 @@
 
 # coding: utf-8
 
-# In[1]:
+# In[51]:
 
 
 from requests import get
@@ -18,7 +18,7 @@ import time
 # -*- coding: utf -*-
 
 
-# In[2]:
+# In[52]:
 
 
 def simple_get(url):
@@ -73,7 +73,7 @@ def cut_string(s, cut):
         return ""
 
 
-# In[3]:
+# In[53]:
 
 
 class forecast(object):
@@ -83,12 +83,11 @@ class forecast(object):
         self.proc_date = proc_date
         self.acc_date = acc_date
 
-def create_weather_df(url, http):
+def create_weather_df(url, http, current_time):
     
     data = {}
     soup = BeautifulSoup(http.request('GET',url).data,'lxml')
     daily_periods_dict = {}
-    current_time = pd.Timestamp(datetime.datetime.now())
 
     proc_date = []
     temp = []
@@ -100,7 +99,7 @@ def create_weather_df(url, http):
     for day in range(15):
         for h in range(4):
             dt = (current_time + timedelta(days=day)).date()
-            proc_date.append(datetime.datetime.combine(dt,datetime.time(h*6+2)))
+            proc_date.append(datetime.datetime.combine(dt,datetime.time(h*6+2)).strftime('%Y%m%d%H'))
 
     period_forcast = soup.findAll("div", {"class":'forecast-column column-1 wt-border-radius-6'})
     for period in period_forcast:
@@ -121,24 +120,20 @@ def create_weather_df(url, http):
         wind_html = period.find("div", {"class":'forecast-column-wind'})
         wind.append(int(wind_html.find('span', {'class':"wt-font-semibold"}).text[1:-5])) 
 
-    daily_periods_dict['website'] = 'https://www.wetter.de/deutschland/wetter-berlin-18228265/wetterprognose.html'
     daily_periods_dict['date_for_which_weather_is_predicted'] = proc_date
-    daily_periods_dict['city'] = 'Berlin'
-    daily_periods_dict['date_of_acquisition'] = current_time
 
     daily_periods_dict['temperature'] = temp
     daily_periods_dict['wind_speed'] = wind
     daily_periods_dict['precipation_per'] = rain
 
     daily_periods_dict['precipation_l'] = rain_l
-    daily_periods_dict['wind_direction'] = None
     daily_periods_dict['condition'] = condition
 
     daily = pd.DataFrame(daily_periods_dict)
     return daily
 
 
-# In[4]:
+# In[54]:
 
 
 cities=['Berlin', 'Hamburg', 'Munich', 'Cologne', 'Frankfurt_am_Main']
@@ -150,11 +145,25 @@ urls=['https://www.wetter.de/deutschland/wetter-berlin-18228265/wetterprognose.h
       'https://www.wetter.de/deutschland/wetter-frankfurt-18221009/wetterprognose.html']
 
 http = urllib3.PoolManager()
+current_time = pd.Timestamp(datetime.datetime.now())
+df = pd.DataFrame()
 
 for i,city in enumerate(cities):
     url = urls[i]
-    df = create_weather_df(url,http)
-    current_time = pd.Timestamp(datetime.datetime.now())
-    pkl_name='./wetter_de/wetter_de_day_periods_'+city+'_'+str(current_time)[:10]+'.pkl'
-    df.to_pickle(pkl_name)
+    cdf = create_weather_df(url,http,current_time)    
+    cdf['city'] = city
+    df = df.append(cdf)
+
+df['website'] = 'https://www.wetter.de'
+df['wind_direction'] = None
+df['date_of_acquisition'] = current_time.strftime('%Y%m%d%H')
+    
+pkl_name='./wetter_de/day_periods/'+current_time.strftime('%Y%m%d%H')+'.pkl'
+df.to_pickle(pkl_name)
+
+
+# In[55]:
+
+
+display(df)
 
