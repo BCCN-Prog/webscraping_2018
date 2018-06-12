@@ -10,12 +10,12 @@ import os
 
 days_to_predict = 15
 http = urllib3.PoolManager()
-cities = ['Berlin']#,'Hamburg', 'Munich', 'Cologne', 'Frankfurt']
-cities_tags = ['berlin-18228265/']# ,'hamburg-18219464/', 'muenchen-18225562/', 'koeln-18220679/', 'frankfurt-18221009/']
+cities = ['Berlin','Hamburg', 'Munich', 'Cologne', 'Frankfurt']
+cities_tags = ['berlin-18228265/' ,'hamburg-18219464/', 'muenchen-18225562/', 'koeln-18220679/', 'frankfurt-18221009/']
 url_hourly_base = 'https://www.wetter.de/deutschland/wetter-'
 tag_tags = ['tag-'+str(tag) for tag in range(9,days_to_predict+1)]
-hourly_website_tags = ['wetterbericht-aktuell']#, 'wetterbericht-morgen', 'wetterbericht-uebermorgen','wetter-bericht','wettervorhersage','wetter-vorhersage','wettervorschau','wetter-vorschau']
-#hourly_website_tags.extend(tag_tags)
+hourly_website_tags = ['wetterbericht-aktuell', 'wetterbericht-morgen', 'wetterbericht-uebermorgen','wetter-bericht','wettervorhersage','wetter-vorhersage','wettervorschau','wetter-vorschau']
+hourly_website_tags.extend(tag_tags)
 
 wind_mapping = { 'Nord': 'N', 'Ost':'E', 'West':'W', 'Süd':'S',
                 'Nordost':'NE','Nordnordost':'NNE', 'Nordostost':'NEE',
@@ -97,7 +97,6 @@ hourly_dict['snow'] = [None]*number_of_predictions
 hourly_dict['uvi'] = [None]*number_of_predictions
 
 data_frame_daily = pd.DataFrame(data=hourly_dict)
-print(data_frame_daily)
 filename = os.path.expanduser('~/Documents/webscraping_2018/data_wetter_de/hourly_period_')
 timestamp = datetime.datetime.now().strftime('%Y%m%d%H')
 filename += timestamp + ".pkl"
