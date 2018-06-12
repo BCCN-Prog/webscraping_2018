@@ -67,6 +67,13 @@ def gather_hourly_city(city, data):
     latitude, longitude= constants.coordinates.get(city)
     location = str(latitude)+ "," + str(longitude)
     response = get_response(location)
+    iterations = 100
+    while(response == None and iterations > 0):
+        response = get_response(location)
+        iterations -= 1
+    if(response == None):
+        return data
+
     hourly_forecasts = response.get("hourly_forecast")
 
     for hourly_forecast in hourly_forecasts:
@@ -91,10 +98,13 @@ def gather_hourly_information():
     }
     for city in constants.coordinates.keys():
         data = gather_hourly_city(city, data)
+
     df = pd.DataFrame(data)
     return df
 
 df = gather_hourly_information()
-timestamp = datetime.datetime.now().strftime('%Y%m%d%H%M')
-filename = "/home/danielv/Documents/webscraping_2018/data_hourly/" + timestamp + ".pkl"
-df.to_pickle(filename)
+
+if(df.size > 0): 
+    timestamp = datetime.datetime.now().strftime('%Y%m%d%H%M')
+    filename = "/home/danielv/Documents/webscraping_2018/data_hourly/" + timestamp + ".pkl"
+    df.to_pickle(filename)
