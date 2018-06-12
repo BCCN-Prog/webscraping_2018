@@ -3,7 +3,7 @@
 # Created by Pooja Subramaniam and Marc Aurel Vischer on Tue, May 8.
 # Temperature is given as a tuple of daily high and low value, both in degrees Celsius as ints.
 # Precipitation is given as "probability" as float.
-# Wind is given as a tuple of strength in Bft (int) and direction 
+# Wind is given as a tuple of strength in Bft (int) and direction
 #(e.g. "NE" if wind _comes from_ north east).
 
 
@@ -39,7 +39,7 @@ for day in range(6):
     #print(day_layer[0]['id'])
     if len(day_layer)!=1:
         raise Exception("Found more than one layer for single day.")
-        
+
     # extract all the cities from that layer
     day_cities = day_layer[0].find_all('div', class_="wk_map_text")
     day_dict = {}
@@ -59,7 +59,7 @@ for day in range(1,4): #layer 0 corresponds to next 6 hrs, layer 1 to entire cur
     #print(day_layer[0]['id'])
     if len(day_layer)!=1:
         raise Exception("Found more than one layer for single day.")
-        
+
     # extract all the cities from that layer
     day_cities = day_layer[0].find_all('div', class_="wk_map_text")
     day_dict = {}
@@ -79,7 +79,7 @@ for day in range(6):
     #print(day_layer[0]['id'])
     if len(day_layer)!=1:
         raise Exception("Found more than one layer for single day.")
-        
+
     # extract all the cities from that layer
     day_cities = day_layer[0].find_all('div', class_="wk_map_text")
     day_dict = {}
@@ -109,7 +109,7 @@ for i,city in enumerate(cities):
         daily_dict['Date_of_acquisition'].append(datetime.datetime.now().strftime('%Y%m%d%H'))
         daily_dict['Website'].append(website)
         daily_dict['City'].append(cities[city])
-        daily_dict['Date_of_prediction'].append(date_of_acquisition+datetime.timedelta(days))
+        daily_dict['Date_of_prediction'].append((date_of_acquisition+datetime.timedelta(days)).strftime('%Y%m%d%H'))
         daily_dict['high_temp'].append(temp_dicts[days][city][0])
         daily_dict['low_temp'].append(temp_dicts[days][city][1])
         daily_dict['wind_speed'].append(wind_dicts[days][city][0])
@@ -144,7 +144,7 @@ city_ids_dict = {'Berlin': '10115-berlin',
                  'München' : '80331-muenchen'}
 
 
-#for the sake of clarity, i tried to be as consistent as possible with 
+#for the sake of clarity, i tried to be as consistent as possible with
 #Pooja's code (daily_dict above) when it comes to saving the data as a dataframe
 #
 #data will be saved into this dictionary before being converted to a dataframe
@@ -161,12 +161,12 @@ for city in cities:
     #we need to remove it manually before parsing
     city_html_fixed = city_html.replace("VORMITTAG</span>","VORMITTAG")
     city_bs = BeautifulSoup(city_html_fixed, "html.parser")
-    
+
     #get the table containing the four-times-a-day forecast and extract the data
     four_table = city_bs.find_all('table', class_='wk_forecast_tbl')[1]
     # using the magic number here to index this is a bit shitty but there are several
     #tables that are all of the class 'wk_forecast_tbl'
-    
+
     daytimes = four_table.find_all('td', class_="wk_bottomline wk_subheader")
     for i,daytime in enumerate(daytimes):
         siblings = [sibling for sibling in daytime.next_siblings]
@@ -187,13 +187,13 @@ for city in cities:
         daily_periods_dict['temperature'].append(temp)
         daily_periods_dict['wind_speed'].append(None)
         daily_periods_dict['humidity'].append(None)
-        daily_periods_dict['precipitation_per'].append(precip)   
-        daily_periods_dict['wind_direction'].append(None)     
+        daily_periods_dict['precipitation_per'].append(precip)
+        daily_periods_dict['wind_direction'].append(None)
         daily_periods_dict['condition'].append(condition)
         daily_periods_dict['snow'].append(None)
         daily_periods_dict['uvi'].append(None)
- 
-#convert to dataframe and save to file       
+
+#convert to dataframe and save to file
 daily_period = pd.DataFrame(daily_periods_dict)
 filename = os.path.expanduser('~/Documents/webscraping_2018/data_bild/daily_period/daily_period_')
 timestamp = datetime.datetime.now().strftime('%Y%m%d%H')
