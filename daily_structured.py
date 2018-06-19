@@ -17,6 +17,9 @@ def get_response(query):
         raise e
 
 def extract_parameters(daily_forecast, city, data):
+    """
+    Extract parameters from request object and store it on data dataFrame
+    """
     date_ = daily_forecast.get('date')
     date_predicted = datetime.datetime.fromtimestamp(int(date_.get('epoch'))).strftime('%Y%m%d%H%M')
     temperature_max = daily_forecast.get('high').get('celsius')
