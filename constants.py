@@ -1,6 +1,4 @@
 # File with important common constants for the API scripts
-# @ToDo: Consider move the KEY to a pmk or similar
-# @ToDo: Change the filename to a general path non system dependent
 import api_info
 
 KEY = api_info.KEY
