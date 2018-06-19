@@ -14,6 +14,7 @@ import pandas as pd
 import urllib3
 import datetime
 import time
+import os
 
 # -*- coding: utf -*-
 
@@ -158,12 +159,12 @@ df['website'] = 'https://www.wetter.de'
 df['wind_direction'] = None
 df['date_of_acquisition'] = current_time.strftime('%Y%m%d%H')
     
-pkl_name='./wetter_de/day_periods/'+current_time.strftime('%Y%m%d%H')+'.pkl'
-df.to_pickle(pkl_name)
+# pkl_name='./wetter_de/day_periods/'+current_time.strftime('%Y%m%d%H')+'.pkl'
+filename = os.path.expanduser('~/Documents/webscraping_2018/data_wetter_de/day_periods')
+timestamp = datetime.datetime.now().strftime('%Y%m%d%H')
+filename += timestamp + ".pkl"
+df.to_pickle(filename)
 
 
-# In[55]:
 
-
-display(df)
 

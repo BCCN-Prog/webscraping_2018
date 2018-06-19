@@ -13,6 +13,7 @@ import pandas as pd
 import urllib3
 import datetime
 import time
+import os
 
 # -*- coding: utf -*-
 
@@ -149,6 +150,8 @@ df['UVI'] = None
 df['website'] = 'https://www.wetter.de'
 df['date_of_acquisition'] = current_time.strftime('%Y%m%d%H')
     
-pkl_name='./wetter_de/daily/'+current_time.strftime('%Y%m%d%H')+'.pkl'
-df.to_pickle(pkl_name)
-
+#pkl_name='./wetter_de/daily/'+current_time.strftime('%Y%m%d%H')+'.pkl'
+filename = os.path.expanduser('~/Documents/webscraping_2018/data_wetter_de/daily')
+timestamp = datetime.datetime.now().strftime('%Y%m%d%H')
+filename += timestamp + ".pkl"
+df.to_pickle(filename)
