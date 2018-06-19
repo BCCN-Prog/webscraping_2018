@@ -1,6 +1,6 @@
 import requests
 import time
-
+import constants
 
 def get_coordinates(city):
     response = requests.get('https://maps.googleapis.com/maps/api/geocode/json?address=' + city)
@@ -23,5 +23,6 @@ def map_cities(cities):
         print(dic[city])
     return dic
 
-cities=['BERLIN', 'HAMBURG', 'MUNICH', 'FRANKFURT', 'COLOGNE']
+#cities=['BERLIN', 'HAMBURG', 'MUNICH', 'FRANKFURT', 'COLOGNE']
+cities = constants.CITIES
 print(map_cities(cities))
