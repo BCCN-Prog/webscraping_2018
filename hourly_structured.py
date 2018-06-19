@@ -71,6 +71,7 @@ def gather_hourly_city(city, data):
     while(response == None and iterations > 0):
         response = get_response(location)
         iterations -= 1
+        time.sleep(10)
     if(response == None):
         return data
 
