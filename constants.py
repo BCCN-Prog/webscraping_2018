@@ -1,7 +1,9 @@
 # File with important common constants for the API scripts
 # @ToDo: Consider move the KEY to a pmk or similar
 # @ToDo: Change the filename to a general path non system dependent
-KEY = "ba3288780ec658cc"
+import api_info
+
+KEY = api_info.KEY
 BASE_URL = "http://api.wunderground.com/api/"+ KEY +"/hourly10day/q/"
 DAILY_BASE_URL = "http://api.wunderground.com/api/"+ KEY +"/forecast10day/q/"
 
