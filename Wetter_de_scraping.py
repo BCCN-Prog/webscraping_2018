@@ -41,7 +41,7 @@ number_of_predictions = number_of_cities*len(hourly_website_tags)*25
 current_time_date = datetime.datetime.now().strftime('%Y%m%d%H')
 hourly_dict = {}
 hourly_dict['website'] = ['Wetter.de']*number_of_predictions
-hourly_dict['date_of_aquisition'] = [current_time_date]*number_of_predictions
+hourly_dict['date_of_acquisition'] = [current_time_date]*number_of_predictions
 
 all_features = np.empty((number_of_cities,len(hourly_website_tags),25,number_of_features), dtype=object)
 for ci, city in enumerate(cities):
