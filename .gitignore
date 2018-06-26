@@ -105,3 +105,4 @@ ENV/
 
 # credentials
 api_info.py
+db_info.py
