@@ -106,10 +106,10 @@ daily_dict = {'Date_of_acquisition':[],'Website':[],'City':[],
 
 for i,city in enumerate(cities):
     for days in range(6):
-        daily_dict['Date_of_acquisition'].append(datetime.datetime.now().strftime('%Y%m%d%H'))
-        daily_dict['Website'].append(website)
-        daily_dict['City'].append(cities[city])
-        daily_dict['Date_of_prediction'].append((date_of_acquisition+datetime.timedelta(days)).strftime('%Y%m%d%H'))
+        daily_dict['date_of_acquisition'].append(datetime.datetime.now().strftime('%Y%m%d%H'))
+        daily_dict['website'].append(website)
+        daily_dict['city'].append(cities[city])
+        daily_dict['date_of_prediction'].append((date_of_acquisition+datetime.timedelta(days)).strftime('%Y%m%d%H'))
         daily_dict['high_temp'].append(temp_dicts[days][city][0])
         daily_dict['low_temp'].append(temp_dicts[days][city][1])
         daily_dict['wind_speed'].append(wind_dicts[days][city][0])

@@ -141,8 +141,8 @@ for i,city in enumerate(cities):
 
 df['wind_speed'] = None
 df['humidity'] = None
-df['precipation_per'] = None
-df['precipation_l'] = None
+df['precipitation_per'] = None
+df['precipitation_l'] = None
 df['wind_direction'] = None
 df['snow'] = None
 df['UVI'] = None

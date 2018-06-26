@@ -1,7 +1,6 @@
 import pony.orm as porm
 import database
 from datetime import date
-import station_names
 import getpass
 
 from pony.orm.core import ObjectNotFound, TransactionIntegrityError
@@ -67,14 +66,14 @@ class DailyPrediction(db.Entity):
     id                 = porm.PrimaryKey(int, auto=True)
     website            = porm.Required(str)
     city               = porm.Required(str)
-    date_of_aquisition = porm.Required(str)
+    date_of_acquisition = porm.Required(str)
     date_for_which_weather_is_predicted = porm.Required(str)
     temperature_max    = porm.Required(float)
     temperature_min    = porm.Required(float)
     wind_speed         = porm.Optional(float, nullable=True)
     humidity           = porm.Optional(float, nullable=True)
-    precipation_per    = porm.Optional(float, nullable=True)
-    precipation_l      = porm.Optional(float, nullable=True)
+    precipitation_per    = porm.Optional(float, nullable=True)
+    precipitation_l      = porm.Optional(float, nullable=True)
     wind_direction     = porm.Optional(str, 3, nullable=True)
     condition          = porm.Optional(str, nullable=True)
     snow               = porm.Optional(float, nullable=True)

@@ -125,9 +125,9 @@ def create_weather_df(url, http, current_time):
 
     daily_periods_dict['temperature'] = temp
     daily_periods_dict['wind_speed'] = wind
-    daily_periods_dict['precipation_per'] = rain
+    daily_periods_dict['precipitation_per'] = rain
 
-    daily_periods_dict['precipation_l'] = rain_l
+    daily_periods_dict['precipitation_l'] = rain_l
     daily_periods_dict['condition'] = condition
 
     daily = pd.DataFrame(daily_periods_dict)
