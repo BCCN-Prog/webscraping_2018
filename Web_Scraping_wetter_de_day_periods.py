@@ -15,6 +15,7 @@ import urllib3
 import datetime
 import time
 import os
+import db_manager
 
 # -*- coding: utf -*-
 
@@ -160,11 +161,17 @@ df['wind_direction'] = None
 df['date_of_acquisition'] = current_time.strftime('%Y%m%d%H')
     
 # pkl_name='./wetter_de/day_periods/'+current_time.strftime('%Y%m%d%H')+'.pkl'
-filename = os.path.expanduser('~/Documents/webscraping_2018/data_wetter_de/day_periods')
-timestamp = datetime.datetime.now().strftime('%Y%m%d%H')
-filename += timestamp + ".pkl"
-df.to_pickle(filename)
+df.date_of_acquisition = df.date_of_acquisition.apply(lambda x: datetime.datetime.strptime(x, '%Y%m%d%H').date())
+df.date_for_which_weather_is_predicted = df.date_for_which_weather_is_predicted.apply(lambda x: datetime.datetime.strptime(x, '%Y%m%d%H%M').date())
 
+#pkl_name='./wetter_de/daily/'+current_time.strftime('%Y%m%d%H')+'.pkl'
+try:
+    db_manager.insert_df("DailyPeriodPrediction", df)
+finally:
+    filename = os.path.expanduser('~/Documents/webscraping_2018/data_wetter_de/day_periods')
+    timestamp = datetime.datetime.now().strftime('%Y%m%d%H')
+    filename += timestamp + ".pkl"
+    df.to_pickle(filename)
 
 
 

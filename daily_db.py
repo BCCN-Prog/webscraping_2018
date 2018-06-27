@@ -92,11 +92,11 @@ def gather_daily_information():
         data = gather_daily_city(city, data)
 
     df = pd.DataFrame(data)
+    df.date_of_acquisition = df.date_of_acquisition.apply(lambda x: datetime.datetime.strptime(x, '%Y%m%d%H').date())
+    df.date_for_which_weather_is_predicted = df.date_for_which_weather_is_predicted.apply(lambda x: datetime.datetime.strptime(x, '%Y%m%d%H%M').date())
     return df
 
 df = gather_daily_information()
-df.date_for_which_weather_is_predicted = df.date_for_which_weather_is_predicted.apply(lambda x: datetime.datetime.strptime(x, '%Y%m%d%H%M').date())
-df.date_of_acquisition = df.date_of_acquisition.apply(lambda x: datetime.datetime.strptime(x, '%Y%m%d%H').date())
 try:
     if(df.size > 0):
         db_manager.insert_df("DailyPrediction", df)

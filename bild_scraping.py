@@ -13,6 +13,7 @@ import pandas as pd
 import warnings
 import os
 import datetime
+import db_manager
 
 #FIRST PART: ONCE-A-DAY PREDICTIONS
 #These are the urls referring directly to high, low temperature
@@ -100,8 +101,8 @@ website = ['Bild.de']
 cities = {"Berlin":"Berlin", "Frankfurt":"Frankfurt", "Hamburg":"Hamburg",
           "Köln":"Cologne", "München":"Munich"}
 
-daily_dict = {'Date_of_acquisition':[],'Website':[],'City':[],
-              'Date_of_prediction':[],'high_temp':[],'low_temp':[],'wind_speed':[],
+daily_dict = {'date_of_acquisition':[],'website':[],'city':[],
+              'date_of_prediction':[],'high_temp':[],'low_temp':[],'wind_speed':[],
               'wind_direction':[], 'precipitation':[]}
 
 for i,city in enumerate(cities):
@@ -194,8 +195,11 @@ for city in cities:
         daily_periods_dict['uvi'].append(None)
 
 #convert to dataframe and save to file
-daily_period = pd.DataFrame(daily_periods_dict)
-filename = os.path.expanduser('~/Documents/webscraping_2018/data_bild/daily_period/daily_period_')
-timestamp = datetime.datetime.now().strftime('%Y%m%d%H')
-filename += timestamp + ".pkl"
-daily_period.to_pickle(filename)
+df = pd.DataFrame(daily_periods_dict)
+try:
+    db_manager.insert_df("DailyPeriodPrediction", df)
+finally:
+    filename = os.path.expanduser('~/Documents/webscraping_2018/data_bild/daily_period/daily_period_')
+    timestamp = datetime.datetime.now().strftime('%Y%m%d%H')
+    filename += timestamp + ".pkl"
+    df.to_pickle(filename)
