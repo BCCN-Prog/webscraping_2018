@@ -163,10 +163,11 @@ city_ids_dict = {'Berlin': '10115-berlin',
 #Pooja's code (daily_dict above) when it comes to saving the data as a dataframe
 #
 #data will be saved into this dictionary before being converted to a dataframe
-daily_periods_dict = {'website':[],'city':[],'date_of_acquisition':[],
-              'date_for_which_weather_is_predicted':[],'temperature':[],
-              'wind_speed':[],'humidity':[],'precipitation_per':[],
-              'wind_direction':[],'condition':[],'snow':[],'uvi':[]}
+daily_periods_dict = {'website':[],'date_for_which_weather_is_predicted':[], 
+                      'city':[],'time_for_which_weather_is_predicted':[],
+                      #'date_of_acquisition':[],
+                      'temperature':[],'wind_speed':[],'precipation_per':[],
+                      'precipation_l':[],'wind_direction':[],'condition':[]}
 
 for city in cities:
     #parse html for each city
@@ -196,21 +197,26 @@ for city in cities:
         prediction_datetime = today_00 + PREDICTION_TIMES[i] #time delta from today 00:00
 
         daily_periods_dict['website'].append(city_url)
+        daily_periods_dict['date_for_which_weather_is_predicted'].append(
+            prediction_datetime.strftime('%Y%m%d%H'))
         daily_periods_dict['city'].append(city)
-        daily_periods_dict['date_of_acquisition'].append(datetime.datetime.now().strftime('%Y%m%d%H'))
-        daily_periods_dict['date_for_which_weather_is_predicted'].append(prediction_datetime.strftime('%Y%m%d%H'))
+        #this is a duplicate of date_for_which_weather_is_predicted, don't know why we need it here
+        daily_periods_dict['time_for_which_weather_is_predicted'].append(
+            prediction_datetime.strftime('%Y%m%d%H'))
+        #would have been nice to know, don't know why it's not in the standard
+        #daily_periods_dict['date_of_acquisition'].append(
+        #    datetime.datetime.now().strftime('%Y%m%d%H'))
         daily_periods_dict['temperature'].append(temp)
         daily_periods_dict['wind_speed'].append(None)
-        daily_periods_dict['humidity'].append(None)
-        daily_periods_dict['precipitation_per'].append(precip)
+        daily_periods_dict['precipation_per'].append(precip)
+        daily_periods_dict['precipation_l'].append(None)
         daily_periods_dict['wind_direction'].append(None)
         daily_periods_dict['condition'].append(condition)
-        daily_periods_dict['snow'].append(None)
-        daily_periods_dict['uvi'].append(None)
+        
 
 #convert to dataframe and save to file
-daily_period = pd.DataFrame(daily_periods_dict)
+DailyPeriodPrediction = pd.DataFrame(daily_periods_dict)
 filename = os.path.expanduser('~/Documents/webscraping_2018/data_bild/daily_period/daily_period_')
 timestamp = datetime.datetime.now().strftime('%Y%m%d%H')
 filename += timestamp + ".pkl"
-daily_period.to_pickle(filename)
+DailyPeriodPrediction.to_pickle(filename)
