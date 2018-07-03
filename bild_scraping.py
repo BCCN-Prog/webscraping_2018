@@ -133,12 +133,12 @@ for i,city in enumerate(cities):
         daily_dict['snow'].append(None)
         daily_dict['UVI'].append(None)
 
-daily = pd.DataFrame(dict([ (k,pd.Series(v)) for k,v in daily_dict.items() ]))
+DailyPrediction = pd.DataFrame(dict([ (k,pd.Series(v)) for k,v in daily_dict.items() ]))
 
 filename = os.path.expanduser('~/Documents/webscraping_2018/data_bild/daily/daily_')
 timestamp = datetime.datetime.now().strftime('%Y%m%d%H')
 filename += timestamp + ".pkl"
-daily.to_pickle(filename)
+DailyPrediction.to_pickle(filename)
 
 #SECOND PART: FOUR-TIMES-A-DAY PREDICTIONS
 #scrape specified cities for morning, noon, afternoon, night, extract temperature,
