@@ -100,23 +100,38 @@ website = ['Bild.de']
 cities = {"Berlin":"Berlin", "Frankfurt":"Frankfurt", "Hamburg":"Hamburg",
           "Köln":"Cologne", "München":"Munich"}
 
-daily_dict = {'Date_of_acquisition':[],'Website':[],'City':[],
-              'Date_of_prediction':[],'high_temp':[],'low_temp':[],'wind_speed':[],
-              'wind_direction':[], 'precipitation':[]}
+daily_dict = {'website':[], 'date_for_which_weather_is_predicted':[], 'city':[],
+              'date_of_aquisition':[], 'temperature_max':[], 'temperature_min':[], 
+              'wind_speed':[], 'humidity':[], 'precipation_per':[],
+              'precipation_l':[], 'wind_direction':[], 'condition':[], 'snow':[], 'UVI':[]}
+
 
 for i,city in enumerate(cities):
     for days in range(6):
-        daily_dict['Date_of_acquisition'].append(datetime.datetime.now().strftime('%Y%m%d%H'))
-        daily_dict['Website'].append(website)
-        daily_dict['City'].append(cities[city])
-        daily_dict['Date_of_prediction'].append((date_of_acquisition+datetime.timedelta(days)).strftime('%Y%m%d%H'))
-        daily_dict['high_temp'].append(temp_dicts[days][city][0])
-        daily_dict['low_temp'].append(temp_dicts[days][city][1])
+        daily_dict['website'].append(website)
+        daily_dict['date_for_which_weather_is_predicted'].append(
+                datetime.datetime.now().strftime('%Y%m%d%H'))
+        daily_dict['city'].append(cities[city])
+        daily_dict['date_of_aquisition'].append(
+                (date_of_acquisition+datetime.timedelta(days)).strftime('%Y%m%d%H'))
+        daily_dict['temperature_max'].append(temp_dicts[days][city][0])
+        daily_dict['temperature_min'].append(temp_dicts[days][city][1])
         daily_dict['wind_speed'].append(wind_dicts[days][city][0])
         daily_dict['wind_direction'].append(wind_dicts[days][city][1])
-
+        daily_dict['wind_speed'].append(None)
+        daily_dict['humidity'].append(None)
+        
+        #bild has precipitation forecasts only for the next 2 days
         if days<2:
-            daily_dict['precipitation'].append(prec_dicts[days+1][city]*100)
+            daily_dict['precipation_per'].append(prec_dicts[days+1][city]*100)
+        else: 
+            daily_dict['precipation_per'].append(None)
+            
+        daily_dict['precipation_l'].append(None)
+        daily_dict['wind_direction'].append(None)
+        daily_dict['condition'].append(None)
+        daily_dict['snow'].append(None)
+        daily_dict['UVI'].append(None)
 
 daily = pd.DataFrame(dict([ (k,pd.Series(v)) for k,v in daily_dict.items() ]))
 
