@@ -168,8 +168,7 @@ city_ids_dict = {'Berlin': '10115-berlin',
 #
 #data will be saved into this dictionary before being converted to a dataframe
 daily_periods_dict = {'website':[],'date_for_which_weather_is_predicted':[],
-                      'city':[],'time_for_which_weather_is_predicted':[],
-                      #'date_of_acquisition':[],
+                      'city':[], 'date_of_acquisition':[],
                       'temperature':[],'wind_speed':[],'precipitation_per':[],
                       'precipitation_l':[],'wind_direction':[],'condition':[]}
 
@@ -204,12 +203,8 @@ for city in cities:
         daily_periods_dict['date_for_which_weather_is_predicted'].append(
             prediction_datetime.strftime('%Y%m%d%H'))
         daily_periods_dict['city'].append(city)
-        #this is a duplicate of date_for_which_weather_is_predicted, don't know why we need it here
-        daily_periods_dict['time_for_which_weather_is_predicted'].append(
-            prediction_datetime.strftime('%Y%m%d%H'))
-        #would have been nice to know, don't know why it's not in the standard
-        #daily_periods_dict['date_of_acquisition'].append(
-        #    datetime.datetime.now().strftime('%Y%m%d%H'))
+        daily_periods_dict['date_of_acquisition'].append(
+            datetime.datetime.now().strftime('%Y%m%d%H'))
         daily_periods_dict['temperature'].append(temp)
         daily_periods_dict['wind_speed'].append(None)
         daily_periods_dict['precipitation_per'].append(precip)
