@@ -13,7 +13,7 @@ import pandas as pd
 import warnings
 import os
 import datetime
-import db_manager
+# import db_manager
 
 #FIRST PART: ONCE-A-DAY PREDICTIONS
 #These are the urls referring directly to high, low temperature
@@ -134,12 +134,15 @@ for i,city in enumerate(cities):
         daily_dict['snow'].append(None)
         daily_dict['UVI'].append(None)
 
-DailyPrediction = pd.DataFrame(dict([ (k,pd.Series(v)) for k,v in daily_dict.items() ]))
-
-filename = os.path.expanduser('~/Documents/webscraping_2018/data_bild/daily/daily_')
-timestamp = datetime.datetime.now().strftime('%Y%m%d%H')
-filename += timestamp + ".pkl"
-DailyPrediction.to_pickle(filename)
+#convert to dataframe and save to file
+df_daily = pd.DataFrame(dict([ (k,pd.Series(v)) for k,v in daily_dict.items() ]))
+try:
+    db_manager.insert_df("DailyPrediction", df_daily)
+finally:
+    filename = os.path.expanduser('~/Documents/webscraping_2018/data_bild/daily/daily_')
+    timestamp = datetime.datetime.now().strftime('%Y%m%d%H')
+    filename += timestamp + ".pkl"
+    DailyPrediction.to_pickle(filename)
 
 #SECOND PART: FOUR-TIMES-A-DAY PREDICTIONS
 #scrape specified cities for morning, noon, afternoon, night, extract temperature,
