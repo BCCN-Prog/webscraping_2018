@@ -103,8 +103,8 @@ cities = {"Berlin":"Berlin", "Frankfurt":"Frankfurt", "Hamburg":"Hamburg",
 
 daily_dict = {'website':[], 'date_for_which_weather_is_predicted':[], 'city':[],
               'date_of_aquisition':[], 'temperature_max':[], 'temperature_min':[],
-              'wind_speed':[], 'humidity':[], 'precipation_per':[],
-              'precipation_l':[], 'wind_direction':[], 'condition':[], 'snow':[], 'UVI':[]}
+              'wind_speed':[], 'humidity':[], 'precipitation_per':[],
+              'precipitation_l':[], 'wind_direction':[], 'condition':[], 'snow':[], 'UVI':[]}
 
 
 for i,city in enumerate(cities):
@@ -124,11 +124,11 @@ for i,city in enumerate(cities):
 
         #bild has precipitation forecasts only for the next 2 days
         if days<2:
-            daily_dict['precipation_per'].append(prec_dicts[days+1][city]*100)
+            daily_dict['precipitation_per'].append(prec_dicts[days+1][city]*100)
         else:
-            daily_dict['precipation_per'].append(None)
+            daily_dict['precipitation_per'].append(None)
 
-        daily_dict['precipation_l'].append(None)
+        daily_dict['precipitation_l'].append(None)
         daily_dict['wind_direction'].append(None)
         daily_dict['condition'].append(None)
         daily_dict['snow'].append(None)
@@ -167,8 +167,8 @@ city_ids_dict = {'Berlin': '10115-berlin',
 daily_periods_dict = {'website':[],'date_for_which_weather_is_predicted':[],
                       'city':[],'time_for_which_weather_is_predicted':[],
                       #'date_of_acquisition':[],
-                      'temperature':[],'wind_speed':[],'precipation_per':[],
-                      'precipation_l':[],'wind_direction':[],'condition':[]}
+                      'temperature':[],'wind_speed':[],'precipitation_per':[],
+                      'precipitation_l':[],'wind_direction':[],'condition':[]}
 
 for city in cities:
     #parse html for each city
@@ -209,8 +209,8 @@ for city in cities:
         #    datetime.datetime.now().strftime('%Y%m%d%H'))
         daily_periods_dict['temperature'].append(temp)
         daily_periods_dict['wind_speed'].append(None)
-        daily_periods_dict['precipation_per'].append(precip)
-        daily_periods_dict['precipation_l'].append(None)
+        daily_periods_dict['precipitation_per'].append(precip)
+        daily_periods_dict['precipitation_l'].append(None)
         daily_periods_dict['wind_direction'].append(None)
         daily_periods_dict['condition'].append(condition)
 
@@ -218,6 +218,7 @@ for city in cities:
 #convert to dataframe and save to file
 df = pd.DataFrame(daily_periods_dict)
 try:
+    pass
     db_manager.insert_df("DailyPeriodPrediction", df)
 finally:
     filename = os.path.expanduser('~/Documents/webscraping_2018/data_bild/daily_period/daily_period_')
