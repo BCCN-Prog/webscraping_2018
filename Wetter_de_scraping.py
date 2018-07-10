@@ -71,7 +71,7 @@ for ci, city in enumerate(cities):
             all_features[ci][i][hi][5] = rain_perecnt
             if int(rain_perecnt) > 0:
                 rain_liter = rain_info.find_all('span',class_="wt-font-semibold")[-1].text.split("/")[0][0:-2]
-                all_features[ci][i][hi][6] = float(rain_liter)
+                all_features[ci][i][hi][6] = float(rain_liter.replace(",","."))
             else:
                 all_features[ci][i][hi][6] = None
             wind_text_ger = wind_info.find('div',class_="forecast-wind-text").text.split("aus")[1].split("\n")[0].replace(" ","")
