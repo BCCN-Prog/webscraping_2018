@@ -9,7 +9,22 @@ The structure for the RESTful API calls is the following:
   
   - `city_location.py` is the script that gets the coordinates of specified named cities.
   
-  - `daily_structured.py` is the script that __gathers daily data__.
+  - `daily_db.py` is the script that __gathers daily data__.
   
-  - `hourly_structured.py` is the script that __gathers hourly data__.
+  - `hourly_db.py` is the script that __gathers hourly data__.
   
+ The structure for Wetter.de scraping is:
+ 
+  - `Wetter_de_scraping.py` scrapes hourly data.
+   
+  - `Web_Scraping_wetter_de_full_day.py` scrapes daily data.
+   
+  - `Web_Scraping_wetter_de_day_periods.py` scrapes periods of the day.
+
+For bild.de:
+  - `bild_scraping.py` does both daily and daily period scraping.
+  
+The helper scripts for database insertion are:
+  - `database.py`
+  - `db_manager.py`
+  - `db_info.py`
