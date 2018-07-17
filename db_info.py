@@ -1,5 +1,5 @@
 #Credentials to log into the database
 
-db_name = "db_webscraping"
-db_user = "webscrapers"
-db_password = "bCCnw3b"
+db_name = "db_name"
+db_user = "db_user"
+db_password = "db_password"
