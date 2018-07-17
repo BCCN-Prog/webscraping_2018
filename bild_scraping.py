@@ -13,7 +13,7 @@ import pandas as pd
 import warnings
 import os
 import datetime
-# import db_manager
+import db_manager
 
 #FIRST PART: ONCE-A-DAY PREDICTIONS
 #These are the urls referring directly to high, low temperature
@@ -102,9 +102,9 @@ cities = {"Berlin":"Berlin", "Frankfurt":"Frankfurt", "Hamburg":"Hamburg",
           "Köln":"Cologne", "München":"Munich"}
 
 daily_dict = {'website':[], 'date_for_which_weather_is_predicted':[], 'city':[],
-              'date_of_aquisition':[], 'temperature_max':[], 'temperature_min':[],
+              'date_of_acquisition':[], 'temperature_max':[], 'temperature_min':[],
               'wind_speed':[], 'humidity':[], 'precipitation_per':[],
-              'precipitation_l':[], 'wind_direction':[], 'condition':[], 'snow':[], 'UVI':[]}
+              'precipitation_l':[], 'wind_direction':[], 'condition':[], 'snow':[], 'uvi':[]}
 
 
 for i,city in enumerate(cities):
@@ -113,13 +113,14 @@ for i,city in enumerate(cities):
         daily_dict['date_for_which_weather_is_predicted'].append(
                 datetime.datetime.now().strftime('%Y%m%d%H'))
         daily_dict['city'].append(cities[city])
-        daily_dict['date_of_aquisition'].append(
+        print((date_of_acquisition+datetime.timedelta(days)))
+        daily_dict['date_of_acquisition'].append(
                 (date_of_acquisition+datetime.timedelta(days)).strftime('%Y%m%d%H'))
+
         daily_dict['temperature_max'].append(temp_dicts[days][city][0])
         daily_dict['temperature_min'].append(temp_dicts[days][city][1])
         daily_dict['wind_speed'].append(wind_dicts[days][city][0])
         daily_dict['wind_direction'].append(wind_dicts[days][city][1])
-        daily_dict['wind_speed'].append(None)
         daily_dict['humidity'].append(None)
 
         #bild has precipitation forecasts only for the next 2 days
@@ -129,20 +130,23 @@ for i,city in enumerate(cities):
             daily_dict['precipitation_per'].append(None)
 
         daily_dict['precipitation_l'].append(None)
-        daily_dict['wind_direction'].append(None)
         daily_dict['condition'].append(None)
         daily_dict['snow'].append(None)
-        daily_dict['UVI'].append(None)
+        daily_dict['uvi'].append(None)
 
 #convert to dataframe and save to file
 df_daily = pd.DataFrame(dict([ (k,pd.Series(v)) for k,v in daily_dict.items() ]))
+print(df_daily)
+df_daily.date_of_acquisition = df_daily.date_of_acquisition.apply(lambda x: datetime.datetime.strptime(str(x), '%Y%m%d%H').date())
+print(df_daily.date_for_which_weather_is_predicted)
+df_daily.date_for_which_weather_is_predicted = df_daily.date_for_which_weather_is_predicted.apply(lambda x: datetime.datetime.strptime(str(x), '%Y%m%d%H').date())
 try:
     db_manager.insert_df("DailyPrediction", df_daily)
 finally:
     filename = os.path.expanduser('~/Documents/webscraping_2018/data_bild/daily/daily_')
     timestamp = datetime.datetime.now().strftime('%Y%m%d%H')
     filename += timestamp + ".pkl"
-    DailyPrediction.to_pickle(filename)
+    df_daily.to_pickle(filename)
 
 #SECOND PART: FOUR-TIMES-A-DAY PREDICTIONS
 #scrape specified cities for morning, noon, afternoon, night, extract temperature,
@@ -215,6 +219,9 @@ for city in cities:
 
 #convert to dataframe and save to file
 df = pd.DataFrame(daily_periods_dict)
+df.date_of_acquisition = df.date_of_acquisition.apply(lambda x: datetime.datetime.strptime(x, '%Y%m%d%H').date())
+df.date_for_which_weather_is_predicted = df.date_for_which_weather_is_predicted.apply(lambda x: datetime.datetime.strptime(x, '%Y%m%d%H').date())
+
 try:
     pass
     db_manager.insert_df("DailyPeriodPrediction", df)

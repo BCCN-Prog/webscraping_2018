@@ -98,6 +98,8 @@ hourly_dict['snow'] = [None]*number_of_predictions
 hourly_dict['uvi'] = [None]*number_of_predictions
 
 df = pd.DataFrame(data=hourly_dict)
+df.date_of_acquisition = df.date_of_acquisition.apply(lambda x: datetime.datetime.strptime(x, '%Y%m%d%H').date())
+df.date_for_which_weather_is_predicted = df.date_for_which_weather_is_predicted.apply(lambda x: datetime.datetime.strptime(x, '%Y%m%d%H%M').date())
 try:
     db_manager.insert_df("HourlyPrediction", df)
 finally:
