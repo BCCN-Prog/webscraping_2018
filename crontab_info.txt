@@ -1,5 +1,8 @@
-# Crontab commands to create files produced by the webscraping scripts
-
-0 */9 * * * /usr/bin/python3 /home/danielv/Documents/webscraping_2018/hourly_structured.py >> /home/danielv/cron_weather.log 2>&1
-0 */9 * * * /usr/bin/python3 /home/danielv/Documents/webscraping_2018/daily_structured.py >> /home/danielv/cron_weather_daily.log 2>&1
+0 8,20 * * * /usr/bin/python3 /home/danielv/Documents/webscraping_2018/hourly_db.py >> /home/danielv/cron_weather.log 2>&1
+0 8,20 * * * /usr/bin/python3 /home/danielv/Documents/webscraping_2018/daily_db.py >> /home/danielv/cron_weather_daily.log 2>&1
 0 2,8,14,20 * * * /home/danielv/anaconda3/bin/python /home/danielv/Documents/webscraping_2018/bild_scraping.py >> /home/danielv/cron_bild.log 2>1
+0 8,20 * * * /home/danielv/anaconda3/bin/python /home/danielv/Documents/webscraping_2018/Wetter_de_scraping.py >> /home/danielv/cron_wetter_de.log 2>&1
+
+0 8,20 * * * /usr/bin/python3 /home/danielv/Documents/webscraping_2018/Web_Scraping_wetter_de_full_day.py >> /home/danielv/cron_wetter_full.log 2>&1
+
+0 2,8,14,20 * * * /home/danielv/anaconda3/bin/python /home/danielv/Documents/webscraping_2018/Web_Scraping_wetter_de_day_periods.py >> /home/danielv/cron_wetter_daily.log 2>1
