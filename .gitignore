@@ -99,3 +99,10 @@ ENV/
 
 # mypy
 .mypy_cache/
+
+# data
+/data*
+
+# credentials
+api_info.py
+db_info.py

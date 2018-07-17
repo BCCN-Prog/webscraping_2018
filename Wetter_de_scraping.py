@@ -6,6 +6,7 @@ import pandas as pd
 import numpy as np
 import pickle
 import os
+import db_manager
 
 
 days_to_predict = 15
@@ -89,15 +90,18 @@ hourly_dict['date_for_which_weather_is_predicted'] = list(all_features[:,1])
 hourly_dict['temperature'] = list(all_features[:,2])
 hourly_dict['wind_speed'] = list(all_features[:,3])
 hourly_dict['humidity'] = list(all_features[:,4])
-hourly_dict['precipation_per'] = list(all_features[:,5])
-hourly_dict['precipation_l'] = list(all_features[:,6])
+hourly_dict['precipitation_per'] = list(all_features[:,5])
+hourly_dict['precipitation_l'] = list(all_features[:,6])
 hourly_dict['wind_direction'] = list(all_features[:,7])
 hourly_dict['condition'] = list(all_features[:,8])
 hourly_dict['snow'] = [None]*number_of_predictions
 hourly_dict['uvi'] = [None]*number_of_predictions
 
-data_frame_daily = pd.DataFrame(data=hourly_dict)
-filename = os.path.expanduser('~/Documents/webscraping_2018/data_wetter_de/hourly_period_')
-timestamp = datetime.datetime.now().strftime('%Y%m%d%H')
-filename += timestamp + ".pkl"
-data_frame_daily.to_pickle(filename)
+df = pd.DataFrame(data=hourly_dict)
+try:
+    db_manager.insert_df("HourlyPrediction", df)
+finally:
+    filename = os.path.expanduser('~/Documents/webscraping_2018/data_wetter_de/hourly_period_')
+    timestamp = datetime.datetime.now().strftime('%Y%m%d%H')
+    filename += timestamp + ".pkl"
+    df.to_pickle(filename)
