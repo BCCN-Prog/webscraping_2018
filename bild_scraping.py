@@ -110,11 +110,11 @@ daily_dict = {'website':[], 'date_for_which_weather_is_predicted':[], 'city':[],
 for i,city in enumerate(cities):
     for days in range(6):
         daily_dict['website'].append(website)
-        daily_dict['date_for_which_weather_is_predicted'].append(
+        daily_dict['date_of_acquisition'].append(
                 datetime.datetime.now().strftime('%Y%m%d%H'))
         daily_dict['city'].append(cities[city])
         print((date_of_acquisition+datetime.timedelta(days)))
-        daily_dict['date_of_acquisition'].append(
+        daily_dict['date_for_which_weather_is_predicted'].append(
                 (date_of_acquisition+datetime.timedelta(days)).strftime('%Y%m%d%H'))
 
         daily_dict['temperature_max'].append(temp_dicts[days][city][0])
